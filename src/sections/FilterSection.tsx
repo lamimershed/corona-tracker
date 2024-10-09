@@ -42,7 +42,16 @@ const FilterSection = () => {
           ))}
         </div>
       </div>
-      <ChartSection values={values} />
+      {values?.length ? (
+        <ChartSection values={values} />
+      ) : (
+        <div className="relative">
+          <div className="text-center text-2xl font-semibold flex justify-center items-center h-[300px] bg-blue-300 blur-xl"></div>
+          <p className=" absolute -translate-x-1/2 -translate-y-1/2 top-[50%] left-[50%] text-[24px] font-semibold">
+            Select States to view Chart
+          </p>
+        </div>
+      )}
     </div>
   );
 };

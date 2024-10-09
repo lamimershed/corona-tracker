@@ -1,49 +1,60 @@
 // import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+// import ExpenseTableSection from "@/sections/ExpenseTableSection";
 import FilterSection from "@/sections/FilterSection";
 import GeneralDataSection from "@/sections/GeneralDataSection";
-import { lazy, memo, Suspense } from "react";
+import { cn } from "@/utils/cn";
+import { lazy, memo, Suspense, useState } from "react";
 const MapLazy = lazy(() => import("@/sections/Map"));
 const Map = memo(MapLazy);
+const ExpenseTableSectionLazy = lazy(
+  () => import("@/sections/ExpenseTableSection"),
+);
+const ExpenseTableSection = memo(ExpenseTableSectionLazy);
 
 const DashBoardPage = () => {
+  const [show, setShow] = useState(false);
   return (
     <div className="p-4 xl:p-8 flex flex-col gap-8 ">
       <GeneralDataSection />
       <FilterSection />
-      <Suspense fallback={<div>Loading...</div>}>
-        <Map />
-      </Suspense>
+
+      {/* HEADING FOR MAP / TABLE */}
+      <h2 className="text-2xl font-semibold text-center">
+        Covid Data Map and Table View
+      </h2>
+      <div className="flex gap-4 justify-center">
+        <button
+          className={cn(
+            "bg-blue-600 text-white p-2 rounded-md",
+            show && "bg-gray-400",
+          )}
+          onClick={() => setShow(false)}
+        >
+          Show Table
+        </button>
+        <button
+          className={cn(
+            "bg-blue-600 text-white p-2 rounded-md",
+            !show && "bg-gray-400",
+          )}
+          onClick={() => setShow(true)}
+        >
+          Show Map
+        </button>
+      </div>
+      <div>
+        {show ? (
+          <Suspense fallback={<div>Loading...</div>}>
+            <Map />
+          </Suspense>
+        ) : (
+          <Suspense fallback={<div>Loading...</div>}>
+            <ExpenseTableSection />
+          </Suspense>
+        )}
+      </div>
     </div>
   );
 };
 
 export default DashBoardPage;
-
-// const Card = ({
-//   heading,
-//   amount,
-//   buttonTitle,
-//   form,
-// }: {
-//   heading: string;
-//   amount: number;
-//   buttonTitle: string;
-//   form?: React.ReactNode;
-// }) => {
-//   return (
-//     <div className="bg-white shadow-[0px_0px_20px_#00000040] p-4 rounded-md gap-3 flex flex-col">
-//       <h1 className="text-xl font-medium text-gray-800">{heading}</h1>
-//       <p className="text-md text-gray-800">{amount}</p>
-//       {!!form && (
-//         <Dialog>
-//           <DialogTrigger asChild>
-//             <button className="bg-blue-600 w-full text-white p-2 rounded-md">
-//               {buttonTitle}
-//             </button>
-//           </DialogTrigger>
-//           <DialogContent className="xl:w-[400px] p-5">{form}</DialogContent>
-//         </Dialog>
-//       )}
-//     </div>
-//   );
-// };
